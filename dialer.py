@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
 
@@ -17,6 +18,18 @@ def load_config():
         )
     with CONFIG_FILE.open() as f:
         return json.load(f)
+
+
+EXTENSION_FILE = Path(__file__).with_name("extension.txt")
+
+
+def load_extension() -> str:
+    if not EXTENSION_FILE.exists():
+        raise FileNotFoundError(
+            f"Extension file '{EXTENSION_FILE.name}' not found. "
+            "Create it with your extension number."
+        )
+    return EXTENSION_FILE.read_text().strip()
 
 
 def make_call(api_key: str, origin: str, number: str) -> str:
@@ -35,15 +48,21 @@ def main(argv: list[str]) -> int:
         print("Usage: dialer.py <phone_number>")
         return 1
     number = argv[1]
+    if number.startswith("tel:"):
+        number = urlparse(number).path
     try:
         cfg = load_config()
     except FileNotFoundError:
         print("Missing config.json. Copy config.example.json and fill in your credentials.")
         return 1
     api_key = cfg.get("api_key")
-    origin = cfg.get("origin")
-    if not api_key or not origin:
-        print("Config must contain 'api_key' and 'origin'.")
+    if not api_key:
+        print("Config must contain 'api_key'.")
+        return 1
+    try:
+        origin = load_extension()
+    except FileNotFoundError:
+        print("Missing extension.txt. Create it with your extension number.")
         return 1
     try:
         result = make_call(api_key, origin, number)
