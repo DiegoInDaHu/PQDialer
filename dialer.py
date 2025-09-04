@@ -6,7 +6,17 @@ from urllib.parse import urlparse
 
 import requests
 
-CONFIG_FILE = Path(__file__).with_name('config.json')
+# helper to locate resource files both in source and frozen executable
+
+
+def get_resource_path(name: str) -> Path:
+    """Return the path to *name* next to the source file or executable."""
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent / name
+    return Path(__file__).with_name(name)
+
+
+CONFIG_FILE = get_resource_path("config.json")
 
 
 def load_config():
@@ -20,7 +30,7 @@ def load_config():
         return json.load(f)
 
 
-EXTENSION_FILE = Path(__file__).with_name("extension.txt")
+EXTENSION_FILE = get_resource_path("extension.txt")
 
 
 def load_extension() -> str:
