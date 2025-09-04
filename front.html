@@ -1,0 +1,29 @@
+<html>
+
+<body>
+    <div>
+        <input id="number" placeholder="numero"/>
+        <button type="button" onclick="callme()">llamame</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function callme() {
+            var XHR = new XMLHttpRequest();
+            XHR.addEventListener('readystatechange', function() {
+                if (XHR.readyState == 4 && XHR.status == 200) {
+                    document.getElementById("result").innerHTML = XHR.responseText;
+                } else {
+                    document.getElementById("result").innerHTML = "ha ocurrido un error: " + XHR.responseText
+                }
+            });
+
+            var FD  = new FormData();
+            FD.append('number', document.getElementById("number").value);
+            XHR.open('POST', 'doC2c.php');
+            document.getElementById("result").innerHTML = "enviando peticion..."
+            XHR.send(FD);
+        }
+    </script>
+</body>
+</html>
