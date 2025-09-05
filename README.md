@@ -15,9 +15,8 @@ This project provides a small command line dialer that triggers calls through th
 ```
 python dialer.py <phone_number>
 ```
-The script sends a request to `https://vpbx.me/api/c2cexternal/<extension>/<number>` using your API key and extension
-from `extension.txt`. The URL may include optional query parameters such as `timeout` and `outboundId` if those features
-are supported in the future. The `<phone_number>` argument can be a plain number or a `tel:` link such as `tel:+123456789`.
+The script sends a request to `https://vpbx.me/api/originatecall/<phone_number>/<extension>` using your API key and extension
+from `extension.txt`. The `<phone_number>` argument can be a plain number or a `tel:` link such as `tel:+123456789`.
 
 ## Building a Windows executable
 The project can be bundled with [PyInstaller](https://www.pyinstaller.org/):
