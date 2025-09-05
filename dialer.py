@@ -44,7 +44,7 @@ def load_extension() -> str:
 
 def make_call(api_key: str, extension: str, number: str) -> str:
     """Initiate a click-to-call from *extension* to *number*."""
-    url = f"https://vpbx.me/api/originatecall/{number}/{extension}"
+    url = f"https://vpbx.me/api/originatecall/{extension}/{number}"
     headers = {
         "Content-Type": "application/json",
         "X-Api-Key": api_key,
