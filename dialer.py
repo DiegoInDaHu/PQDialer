@@ -42,8 +42,9 @@ def load_extension() -> str:
     return EXTENSION_FILE.read_text().strip()
 
 
-def make_call(api_key: str, origin: str, number: str) -> str:
-    url = f"https://vpbx.me/api/originatecall/{origin}/{number}"
+def make_call(api_key: str, extension: str, number: str) -> str:
+    """Initiate a click-to-call to *number* from *extension*."""
+    url = f"https://vpbx.me/api/c2cexternal/{extension}/{number}"
     headers = {
         "Content-Type": "application/json",
         "X-Api-Key": api_key,
@@ -70,12 +71,12 @@ def main(argv: list[str]) -> int:
         print("Config must contain 'api_key'.")
         return 1
     try:
-        origin = load_extension()
+        extension = load_extension()
     except FileNotFoundError:
         print("Missing extension.txt. Create it with your extension number.")
         return 1
     try:
-        result = make_call(api_key, origin, number)
+        result = make_call(api_key, extension, number)
         print("Call initiated:", result)
     except requests.HTTPError as exc:
         print("Failed to initiate call:", exc.response.text)
