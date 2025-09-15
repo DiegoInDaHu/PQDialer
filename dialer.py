@@ -32,16 +32,15 @@ def load_config():
 
 def make_call(api_key: str, extension: str, number: str) -> str:
     """Initiate a click-to-call from *extension* to *number*."""
-    url = f"https://vpbx.me/api/originatecall/{extension}/{number}"
+    url = (
+        f"https://vpbx.me/api/originatecall/{extension}/{number}"
+        "?timeout=20&autoAnswer=true"
+    )
     headers = {
         "Content-Type": "application/json",
         "X-Api-Key": api_key,
     }
-    # Older documentation used the camelCase ``autoAnswer`` parameter, but the
-    # API expects a lowercase ``autoanswer`` flag for enabling automatic
-    # answering on compatible terminals.
-    params = {"timeout": 20, "autoanswer": "true"}
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.text
 
