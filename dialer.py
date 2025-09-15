@@ -37,7 +37,8 @@ def make_call(api_key: str, extension: str, number: str) -> str:
         "Content-Type": "application/json",
         "X-Api-Key": api_key,
     }
-    response = requests.get(url, headers=headers)
+    params = {"autoAnswer": "true"}
+    response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
     return response.text
 
