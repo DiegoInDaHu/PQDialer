@@ -5,27 +5,28 @@ from urllib.parse import urlparse
 
 import requests
 
-# helper to locate resource files both in source and frozen executable
 
-
-def get_resource_path(name: str) -> Path:
-    """Return the path to *name* next to the source file or executable."""
+def get_config_file() -> Path:
+    """Return path to ``config.json`` preferring an external copy."""
     if getattr(sys, "frozen", False):
-        return Path(sys.executable).parent / name
-    return Path(__file__).with_name(name)
-
-
-CONFIG_FILE = get_resource_path("config.json")
+        exe_dir = Path(sys.argv[0]).resolve().parent
+        external = exe_dir / "config.json"
+        if external.exists():
+            return external
+        bundle_dir = Path(getattr(sys, "_MEIPASS", exe_dir))
+        return bundle_dir / "config.json"
+    return Path(__file__).with_name("config.json")
 
 
 def load_config():
-    if not CONFIG_FILE.exists():
+    config_file = get_config_file()
+    if not config_file.exists():
         raise FileNotFoundError(
-            f"Configuration file '{CONFIG_FILE.name}' not found. "
+            f"Configuration file '{config_file.name}' not found. "
             "Copy 'config.example.json' to 'config.json' and set your "
             "API credentials and extension."
         )
-    with CONFIG_FILE.open() as f:
+    with config_file.open() as f:
         return json.load(f)
 
 
