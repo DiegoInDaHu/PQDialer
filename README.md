@@ -4,9 +4,8 @@ This project provides a small command line dialer that triggers calls through th
 
 ## Configuration
 1. Install Python 3.10+.
-2. Copy `config.example.json` to `config.json` and fill in your API key.
-3. Copy `extension.example.txt` to `extension.txt` and set your extension number.
-4. Install dependencies:
+2. Copy `config.example.json` to `config.json` and fill in your API key and extension number.
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
@@ -16,7 +15,7 @@ This project provides a small command line dialer that triggers calls through th
 python dialer.py <phone_number>
 ```
 The script sends a request to `https://vpbx.me/api/originatecall/<phone_number>/<extension>` using your API key and extension
-from `extension.txt`. The `<phone_number>` argument can be a plain number or a `tel:` link such as `tel:+123456789`.
+from `config.json`. The `<phone_number>` argument can be a plain number or a `tel:` link such as `tel:+123456789`.
 
 ## Building a Windows executable
 The project can be bundled with [PyInstaller](https://www.pyinstaller.org/):

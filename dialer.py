@@ -1,5 +1,4 @@
 import json
-import os
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -24,22 +23,10 @@ def load_config():
         raise FileNotFoundError(
             f"Configuration file '{CONFIG_FILE.name}' not found. "
             "Copy 'config.example.json' to 'config.json' and set your "
-            "API credentials."
+            "API credentials and extension."
         )
     with CONFIG_FILE.open() as f:
         return json.load(f)
-
-
-EXTENSION_FILE = get_resource_path("extension.txt")
-
-
-def load_extension() -> str:
-    if not EXTENSION_FILE.exists():
-        raise FileNotFoundError(
-            f"Extension file '{EXTENSION_FILE.name}' not found. "
-            "Create it with your extension number."
-        )
-    return EXTENSION_FILE.read_text().strip()
 
 
 def make_call(api_key: str, extension: str, number: str) -> str:
@@ -67,13 +54,12 @@ def main(argv: list[str]) -> int:
         print("Missing config.json. Copy config.example.json and fill in your credentials.")
         return 1
     api_key = cfg.get("api_key")
+    extension = cfg.get("extension")
     if not api_key:
         print("Config must contain 'api_key'.")
         return 1
-    try:
-        extension = load_extension()
-    except FileNotFoundError:
-        print("Missing extension.txt. Create it with your extension number.")
+    if not extension:
+        print("Config must contain 'extension'.")
         return 1
     try:
         result = make_call(api_key, extension, number)
