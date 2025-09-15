@@ -14,7 +14,7 @@ This project provides a small command line dialer that triggers calls through th
 ```
 python dialer.py <phone_number>
 ```
-The script sends a request to `https://vpbx.me/api/originatecall/<extension>/<phone_number>?autoAnswer=true` using your API
+The script sends a request to `https://vpbx.me/api/originatecall/<extension>/<phone_number>?timeout=20&autoAnswer=true` using your API
 key and extension from `config.json`. The `<phone_number>` argument can be a plain number or a `tel:` link such as
 `tel:+123456789`.
 
